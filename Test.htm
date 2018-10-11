@@ -1,0 +1,100 @@
+﻿<html>
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.8.0/jasmine.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.8.0/jasmine.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.8.0/jasmine-html.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasmine/2.8.0/boot.min.js"></script>
+    <script src="Jisp.js"></script>
+</head>
+<body>
+<script>
+
+    describe('Expressions', function () {
+
+        it('Function', function () {
+            expect(Jisp.Eval(
+                [
+                    ["Function",
+                        ["x", "y"],
+                        ["*",
+                            ["Get", "x"],
+                            ["Get", "y"]
+                        ]
+                    ],
+                    2,
+                    5
+                ]
+            )).toEqual(10);
+        });
+
+        it('For', function () {
+            expect(Jisp.Eval(
+                ["For", "i", 0, 10, 2,
+                    ["Get", "i"]
+                ]
+            )).toEqual([0, 2, 4, 6, 8, 10]);
+        });
+
+        it('While', function () {
+            expect(Jisp.Eval(
+                [
+                    ["Set", "i", 0],
+                    ["While",
+                        ["<",
+                            ["Get", "i"],
+                            3],
+                        ["++", "i"]
+                    ]
+                ]
+            )).toEqual([0, [0, 1, 2]]);
+        });
+
+        it('If', function () {
+            expect(Jisp.Eval(["If", true, 1, 2])).toEqual(1);
+            expect(Jisp.Eval(["If", false, 1, 2])).toEqual(2);
+        });
+
+        it('Variables', function () {
+            expect(Jisp.Eval(
+                [
+                    ["Set", "i", 1],
+                    ["Get", "i"],
+                ]
+            )).toEqual([1, 1]);
+        });
+
+        it('Operators', function () {
+            expect(Jisp.Eval(["+", 1, 2])).toEqual(3);
+            expect(Jisp.Eval(["-", 1, 2])).toEqual(-1);
+            expect(Jisp.Eval(["/", 1, 2])).toEqual(0.5);
+            expect(Jisp.Eval(["*", 1, 2])).toEqual(2);
+            expect(Jisp.Eval(
+                [
+                    ["Set", "i", 0],
+                    ["++", "i"],
+                    ["++", "i"],
+                    ["++", "i"],
+                    ["--", "i"],
+                    ["Get", "i"]
+                ]
+            )).toEqual([0, 0, 1, 2, 3, 2]);
+        });
+
+        it('Library', function () {
+            expect(Jisp.Eval(
+                ["Print",
+                    ["+",
+                        ["*", 2, 3],
+                        ["Sin",
+                            ["/", 3.14, 2]
+                        ]
+                    ]
+                ]
+            )).toEqual(6.9999996829318345);
+        });
+
+    });
+
+</script>
+</body>
+</html>
