@@ -1,4 +1,3 @@
-﻿
 var Jisp = {
 
     "Get": function (name) {
@@ -11,7 +10,6 @@ var Jisp = {
 
     "Function": function (parameters, body) {
         return function () {
-            Jisp = Object.create(Jisp);
             for (var i = 0; i < parameters.length; i++) {
                 Jisp[parameters[i]] = arguments[i];
             }
